@@ -1,0 +1,161 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<head>
+	<style type="text/css">
+	.well{
+		margin-top: 10px;
+		background-color: #75BFB2;
+	}
+	a{
+		color: #25383C;
+	}
+	</style>
+</head>
+
+<nav class="collapse navbar-collapse navbar-right" role="navigation">
+	<a href="/show/<%= session[:user_id] %>"><button>Edit My Profile</button></a>
+	<form action="/logout" method="post">
+	<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+	<input type="hidden" name="_method" value="delete">
+	<input type="submit" value="Logout">
+	</form>
+</nav>
+	
+		<div class="col-lg-10 col-lg-offset-1">
+			<div class="well">
+				<h1>Welcome, <%= @user.first_name %></h1>
+				<h3>Here are some of the events at your state:</h3>
+				<table class="table">
+					<tr>
+						<th>Name</th>
+						<th>Date</th>
+						<th>Location</th>
+						<th>Host</th>
+						<th>Action/Status</th>
+					</tr>
+					<% @events.each do |e| %>
+						<% if e.location.state == e.user.location.state %>
+						<tr>
+							<td><a href="/events/<%= e.id %>"><%= e.name %></a></td>
+							<td><%= e.date %></td>
+							<td><%= e.location.city %></td>
+							<td><%= e.user.first_name %></td>
+							<td>
+								<a href="">Edit</a>
+								<a href="">Delete</a>
+							</td>
+						</tr>
+						<% end %>
+					<% end %>
+				</table>
+				<h3>Here are some of the events on other states:</h3>
+				<table class="table">
+					<tr>
+						<th>Name</th>
+						<th>Date</th>
+						<th>Location</th>
+						<th>State</th>
+						<th>Host</th>
+						<th>Action</th>
+					</tr>
+					<% @events.each do |e| %>
+					<% if e.location.state != e.user.location.state %>
+					<tr>
+						<td><a href="/events/<%= e.id %>"><%= e.name %></a></td>
+						<td><%= e.date %></td>
+						<td><%= e.location.city %></td>
+						<td><%= e.location.state %></td>
+						<td><%= e.user.first_name %></td>
+						<td>
+							<form action="/join/<%= e.id %>" method="post">
+								<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+								<input type="submit" value="Join">
+							</form>
+						</td>
+					</tr>
+					<% end %>
+					<% end %>
+				</table>
+
+				<form action="/ecreate" method="post">
+					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+					<h1>Add Event</h1>
+					<p>
+					<label for="name">Name:</label>
+					<input type="text" name="name" id="name" placeholder="Event name">
+					</p>
+					<p>
+					<label for="date">Date:</label>
+					<input type="date" name="date" id="date">
+					</p>
+					<p>
+					<label for="city">City:</label>
+					<input type="text" name="city" id="city">
+					</p>
+					<p>
+					<label for="state">State:</label>
+					<select name="state" id="state">
+						<option value="AL">AL</option>
+						<option value="AK">AK</option>
+						<option value="AZ">AZ</option>
+						<option value="AR">AR</option>
+						<option value="CA">CA</option>
+						<option value="CO">CO</option>
+						<option value="CT">CT</option>
+						<option value="DE">DE</option>
+						<option value="DC">DC</option>
+						<option value="FL">FL</option>
+						<option value="GA">GA</option>
+						<option value="HI">HI</option>
+						<option value="ID">ID</option>
+						<option value="IL">IL</option>
+						<option value="IN">IN</option>
+						<option value="IA">IA</option>
+						<option value="KS">KS</option>
+						<option value="KY">KY</option>
+						<option value="LA">LA</option>
+						<option value="ME">ME</option>
+						<option value="MD">MD</option>
+						<option value="MA">MA</option>
+						<option value="MI">MI</option>
+						<option value="MN">MN</option>
+						<option value="MS">MS</option>
+						<option value="MO">MO</option>
+						<option value="MT">MT</option>
+						<option value="NE">NE</option>
+						<option value="NV">NV</option>
+						<option value="NH">NH</option>
+						<option value="NJ">NJ</option>
+						<option value="NM">NM</option>
+						<option value="NY">NY</option>
+						<option value="NC">NC</option>
+						<option value="ND">ND</option>
+						<option value="OH">OH</option>
+						<option value="OK">OK</option>
+						<option value="OR">OR</option>
+						<option value="PA">PA</option>
+						<option value="RI">RI</option>
+						<option value="SC">SC</option>
+						<option value="SD">SD</option>
+						<option value="TN">TN</option>
+						<option value="TX">TX</option>
+						<option value="UT">UT</option>
+						<option value="VT">VT</option>
+						<option value="VA">VA</option>
+						<option value="WA">WA</option>
+						<option value="WV">WV</option>
+						<option value="WI">WI</option>
+						<option value="WY">WY</option>
+					</select>
+					</p>
+					<input type="submit" value="Add Event">
+				</form>
+				<div id="msg">
+				<% if flash.any? %>
+					<% flash[:errors].each do |f| %>
+					<li><%= f %></li>
+					<% end %>
+				<% end %>
+				</div>
+			</div>
+</div>
