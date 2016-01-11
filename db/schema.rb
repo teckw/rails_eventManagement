@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20151016033437) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "attendances", force: true do |t|
     t.integer  "user_id"
     t.integer  "event_id"
@@ -20,8 +23,8 @@ ActiveRecord::Schema.define(version: 20151016033437) do
     t.datetime "updated_at"
   end
 
-  add_index "attendances", ["event_id"], name: "index_attendances_on_event_id"
-  add_index "attendances", ["user_id"], name: "index_attendances_on_user_id"
+  add_index "attendances", ["event_id"], name: "index_attendances_on_event_id", using: :btree
+  add_index "attendances", ["user_id"], name: "index_attendances_on_user_id", using: :btree
 
   create_table "comments", force: true do |t|
     t.text     "content"
@@ -31,8 +34,8 @@ ActiveRecord::Schema.define(version: 20151016033437) do
     t.datetime "updated_at"
   end
 
-  add_index "comments", ["event_id"], name: "index_comments_on_event_id"
-  add_index "comments", ["user_id"], name: "index_comments_on_user_id"
+  add_index "comments", ["event_id"], name: "index_comments_on_event_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "events", force: true do |t|
     t.string   "name"
@@ -43,8 +46,8 @@ ActiveRecord::Schema.define(version: 20151016033437) do
     t.integer  "user_id"
   end
 
-  add_index "events", ["location_id"], name: "index_events_on_location_id"
-  add_index "events", ["user_id"], name: "index_events_on_user_id"
+  add_index "events", ["location_id"], name: "index_events_on_location_id", using: :btree
+  add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
   create_table "locations", force: true do |t|
     t.string   "city"
@@ -63,6 +66,6 @@ ActiveRecord::Schema.define(version: 20151016033437) do
     t.datetime "updated_at"
   end
 
-  add_index "users", ["location_id"], name: "index_users_on_location_id"
+  add_index "users", ["location_id"], name: "index_users_on_location_id", using: :btree
 
 end
